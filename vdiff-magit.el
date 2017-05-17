@@ -1,8 +1,13 @@
 ;;; vdiff-magit.el --- magit integration for vdiff -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2017 Free Software Foundation, Inc.
+;; Copyright (C) 2017  Justin Burkett
 
 ;; Author: Justin Burkett <justin@burkett.cc>
+;; Maintainer: Justin Burkett <justin@burkett.cc>
+;; URL: https://github.com/justbur/emacs-vdiff
+;; Version: 0.1
+;; Keywords: diff
+;; Package-Requires: ((emacs "24.4") (vdiff "0.3") (magit "20170516.1627"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
