@@ -13,9 +13,9 @@
 
 ** Installation and Usage
 
-   vdiff-magit should be available in MELPA soon, which will be the recommended
-   way to install it and keep it up to date. To install it you may do =M-x
-   package-install RET vdiff RET=.
+   vdiff-magit is available on [[https://melpa.org/][MELPA]], which is the recommended way to install it
+   and keep it up to date. To install it you may do =M-x package-install RET
+   vdiff RET=.
 
 ** Magit integration details
 
