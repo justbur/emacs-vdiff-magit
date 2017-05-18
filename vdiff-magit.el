@@ -7,7 +7,7 @@
 ;; URL: https://github.com/justbur/emacs-vdiff
 ;; Version: 0.3
 ;; Keywords: diff
-;; Package-Requires: ((emacs "24.4") (vdiff "0.3") (magit "20170516.1627"))
+;; Package-Requires: ((emacs "24.4") (vdiff "0.3") (magit "2.10.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
