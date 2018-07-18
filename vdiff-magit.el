@@ -125,8 +125,8 @@ conflicts, including those already resolved by Git, use
          (unmerged (magit-unmerged-files)))
      (unless unmerged
        (user-error "There are no unresolved conflicts"))
-     (list (magit-completing-read "Resolve file" unmerged nil t nil nil
-                                  (car (member current unmerged))))))
+     (list (completing-read "Resolve file" unmerged nil t nil nil
+                            (car (member current unmerged))))))
   (if vdiff-magit-use-ediff-for-merges
       (magit-ediff-resolve file)
     (vdiff-merge-conflict file)))
@@ -136,9 +136,9 @@ conflicts, including those already resolved by Git, use
   "Stage and unstage changes to FILE using vdiff.
 FILE has to be relative to the top directory of the repository."
   (interactive
-   (list (magit-completing-read "Selectively stage file" nil
-                                (magit-tracked-files) nil nil nil
-                                (magit-current-file))))
+   (list (completing-read "Selectively stage file" nil
+                          (magit-tracked-files) nil nil nil
+                          (magit-current-file))))
   (magit-with-toplevel
     (let* ((buf-a (or (magit-get-revision-buffer "HEAD" file)
                       (magit-find-file-noselect "HEAD" file)))
