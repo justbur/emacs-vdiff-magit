@@ -137,8 +137,9 @@ conflicts, including those already resolved by Git, use
 FILE has to be relative to the top directory of the repository."
   (interactive
    (list (magit-completing-read "Selectively stage file" nil
-                                (magit-tracked-files) nil nil nil
-                                (magit-current-file))))
+                                (lambda (file)
+                                  (member file (magit-tracked-files)))
+                                nil nil nil (magit-current-file))))
   (magit-with-toplevel
     (let* ((buf-a (or (magit-get-revision-buffer "HEAD" file)
                       (magit-find-file-noselect "HEAD" file)))
