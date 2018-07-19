@@ -136,10 +136,8 @@ conflicts, including those already resolved by Git, use
   "Stage and unstage changes to FILE using vdiff.
 FILE has to be relative to the top directory of the repository."
   (interactive
-   (list (magit-completing-read "Selectively stage file" nil
-                                (lambda (file)
-                                  (member file (magit-tracked-files)))
-                                nil nil nil (magit-current-file))))
+   (list (magit-completing-read "Selectively stage file" (magit-tracked-files)
+                                nil nil nil nil (magit-current-file))))
   (magit-with-toplevel
     (let* ((buf-a (or (magit-get-revision-buffer "HEAD" file)
                       (magit-find-file-noselect "HEAD" file)))
