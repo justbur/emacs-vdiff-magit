@@ -317,7 +317,7 @@ and discard changes using vdiff, use `vdiff-magit-stage'.
 FILE must be relative to the top directory of the repository."
   (interactive
    (list (magit-read-file-choice "Show unstaged changes for file"
-                                 (magit-modified-files)
+                                 (magit-unstaged-files)
                                  "No unstaged files")))
   (magit-with-toplevel
     (vdiff-buffers
