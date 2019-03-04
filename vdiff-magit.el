@@ -7,7 +7,7 @@
 ;; URL: https://github.com/justbur/emacs-vdiff-magit
 ;; Version: 0.3.3
 ;; Keywords: diff
-;; Package-Requires: ((emacs "24.4") (vdiff "0.3") (magit "2.10.0"))
+;; Package-Requires: ((emacs "24.4") (vdiff "0.3") (magit "2.10.0") (transient "0.1.0"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -96,21 +96,19 @@ file and the index with the HEAD omitted."
   :group 'vdiff-magit
   :type 'boolean)
 
-;; (defvar magit-ediff-previous-winconf nil)
-
-;;;###autoload (autoload 'vdiff-magit-popup "vdiff-magit" nil t)
-(magit-define-popup vdiff-magit-popup
-  "Popup console for vdiff commands."
-  :actions '((?d "Dwim"          vdiff-magit-dwim)
-             (?u "Show unstaged" vdiff-magit-show-unstaged)
-             (?s "Stage (vdiff)" vdiff-magit-stage)
-             (?i "Show staged"   vdiff-magit-show-staged)
-             (?m "Resolve"       vdiff-magit-resolve)
-             (?w "Show worktree" vdiff-magit-show-working-tree)
-             (?r "Diff range"    vdiff-magit-compare)
-             (?c "Show commit"   vdiff-magit-show-commit) nil
-             (?z "Show stash"    vdiff-magit-show-stash))
-  :max-action-columns 2)
+;;;###autoload (autoload 'vdiff-magit "magit-vdiff" nil)
+(define-transient-command vdiff-magit ()
+  "Show differences using the vdiff package."
+  ["vdiff"
+   [("d" "Dwim"          vdiff-magit-dwim)
+    ("s" "Stage"         vdiff-magit-stage)
+    ("m" "Resolve"       vdiff-magit-resolve)]
+   [("u" "Show unstaged" vdiff-magit-show-unstaged)
+    ("i" "Show staged"   vdiff-magit-show-staged)
+    ("w" "Show worktree" vdiff-magit-show-working-tree)]
+   [("c" "Show commit"   vdiff-magit-show-commit)
+    ("r" "Diff range"    vdiff-magit-compare)
+    ("z" "Show stash"    vdiff-magit-show-stash)]])
 
 ;;;###autoload
 (defun vdiff-magit-resolve (file)

@@ -1,10 +1,10 @@
 * vdiff-magit
 
 ** Table of Contents                                                    :TOC:
- - [[#vdiff-magit][vdiff-magit]]
-   - [[#introduction][Introduction]]
-   - [[#installation-and-usage][Installation and Usage]]
-   - [[#magit-integration-details][Magit integration details]]
+- [[#vdiff-magit][vdiff-magit]]
+  - [[#introduction][Introduction]]
+  - [[#installation-and-usage][Installation and Usage]]
+  - [[#magit-integration-details][Magit integration details]]
 
 ** Introduction
 
@@ -27,11 +27,11 @@
 #+BEGIN_SRC emacs-lisp
   (require 'vdiff-magit)
   (define-key magit-mode-map "e" 'vdiff-magit-dwim)
-  (define-key magit-mode-map "E" 'vdiff-magit-popup)
-  (setcdr (assoc ?e (plist-get magit-dispatch-popup :actions))
-          '("vdiff dwim" 'vdiff-magit-dwim))
-  (setcdr (assoc ?E (plist-get magit-dispatch-popup :actions))
-          '("vdiff popup" 'vdiff-magit-popup))
+  (define-key magit-mode-map "E" 'vdiff-magit)
+  (transient-suffix-put 'magit-dispatch "e" :description "vdiff (dwim)")
+  (transient-suffix-put 'magit-dispatch "e" :command 'vdiff-magit-dwim)
+  (transient-suffix-put 'magit-dispatch "E" :description "vdiff")
+  (transient-suffix-put 'magit-dispatch "E" :command 'vdiff-magit)
   ;; This flag will default to using ediff for merges. vdiff-magit does not yet
   ;; support 3-way merges. Please see the docstring of this variable for more
   ;; information
