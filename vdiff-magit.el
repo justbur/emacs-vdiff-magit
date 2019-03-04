@@ -213,7 +213,7 @@ range)."
              (magit-find-file-noselect rev-b file-b))
        (or (get-file-buffer file-b)
            (find-file-noselect file-b)))
-     nil t t)))
+     nil nil t t)))
 
 ;;;###autoload
 (defun vdiff-magit-dwim ()
@@ -303,7 +303,7 @@ FILE must be relative to the top directory of the repository."
        (magit-find-file-noselect "HEAD" file))
    (or (get-buffer (concat file ".~{index}~"))
        (magit-find-file-index-noselect file t))
-   nil t t))
+   nil nil t t))
 
 ;;;###autoload
 (defun vdiff-magit-show-unstaged (file)
@@ -323,7 +323,7 @@ FILE must be relative to the top directory of the repository."
          (magit-find-file-index-noselect file t))
      (or (get-file-buffer file)
          (find-file-noselect file))
-     nil t t)))
+     nil nil t t)))
 
 ;; ;;;###autoload
 (defun vdiff-magit-show-working-tree (file)
@@ -338,7 +338,7 @@ FILE must be relative to the top directory of the repository."
      (or (magit-get-revision-buffer "HEAD" file)
          (magit-find-file-noselect "HEAD" file))
      (or (get-file-buffer file) (find-file-noselect file))
-     nil t t)))
+     nil nil t t)))
 
 ;; ;;;###autoload
 (defun vdiff-magit-show-commit (commit)
