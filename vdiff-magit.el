@@ -184,6 +184,21 @@ FILE has to be relative to the top directory of the repository."
               (kill-buffer buf-a)))
          t nil)))))
 
+(defun vdiff-magit--kill-buffer-if-temporary (buffer)
+  "Kills `buffer' if it does not point to a file on disk."
+  (when (let ((buf-file (buffer-file-name buffer)))
+          (or (not buf-file) (not (file-exists-p buf-file))))
+    (kill-buffer buffer)))
+
+(defun vdiff-magit--kill-temp-buffers (b1 b2)
+  "Kill b1 and or b2 if they are temporary buffers
+
+This is expected to be used as a callback to vdiff-buffers so
+that, for example, in `vdiff-magit-compare`, we preseve the
+original file buffer."
+  (vdiff-magit--kill-buffer-if-temporary b1)
+  (vdiff-magit--kill-buffer-if-temporary b2))
+
 ;; ;;;###autoload
 (defun vdiff-magit-compare (rev-a rev-b file-a file-b)
   "Compare REVA:FILEA with REVB:FILEB using vdiff.
@@ -213,7 +228,7 @@ range)."
              (magit-find-file-noselect rev-b file-b))
        (or (get-file-buffer file-b)
            (find-file-noselect file-b)))
-     nil nil t t)))
+     nil 'vdiff-magit--kill-temp-buffers t nil)))
 
 ;;;###autoload
 (defun vdiff-magit-dwim ()
