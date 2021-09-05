@@ -96,7 +96,7 @@ file and the index with the HEAD omitted."
   :group 'vdiff-magit
   :type 'boolean)
 
-;;;###autoload (autoload 'vdiff-magit "magit-vdiff" nil)
+;;;###autoload (autoload 'vdiff-magit "vdiff-magit" nil)
 (define-transient-command vdiff-magit ()
   "Show differences using the vdiff package."
   ["vdiff"
