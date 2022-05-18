@@ -97,7 +97,7 @@ file and the index with the HEAD omitted."
   :type 'boolean)
 
 ;;;###autoload (autoload 'vdiff-magit "vdiff-magit" nil)
-(define-transient-command vdiff-magit ()
+(transient-define-prefix vdiff-magit ()
   "Show differences using the vdiff package."
   ["vdiff"
    [("d" "Dwim"          vdiff-magit-dwim)
