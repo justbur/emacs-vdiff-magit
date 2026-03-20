@@ -7,7 +7,7 @@
 ;; URL: https://github.com/justbur/emacs-vdiff-magit
 ;; Version: 0.3.3
 ;; Keywords: diff
-;; Package-Requires: ((emacs "24.4") (vdiff "0.2.4") (magit "2.10.0") (transient "0.1.0"))
+;; Package-Requires: ((emacs "24.4") (vdiff "0.2.4") (magit "2.10.0") (transient "0.1.0") (dash "2.19.1"))
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -31,6 +31,7 @@
 (require 'vdiff)
 (require 'magit)
 (require 'magit-ediff)
+(require 'dash)
 
 (defgroup vdiff-magit nil
   "vdiff support for Magit."
@@ -79,12 +80,12 @@ tree at the time of stashing."
   :type 'boolean)
 
 (defcustom vdiff-magit-use-ediff-for-merges nil
-  "If non-nil prefer using `magit-ediff-resolve' over `vdiff-magit-resolve'.
+  "If non-nil prefer using `magit-ediff-resolve-rest' over `vdiff-magit-resolve'.
 
 The vdiff-magit version only supports 2-way merges right now and
 not 3-way ones. If you use `vdiff-magit-resolve' in a situation
 requiring a 3-way merge it will abort and forward to
-`magit-ediff-resolve' instead. The purpose of this flag is to
+`magit-ediff-resolve-rest' instead. The purpose of this flag is to
 make the merge experience consistent across all types of
 merges."
   :group 'vdiff-magit
@@ -126,7 +127,7 @@ conflicts, including those already resolved by Git, use
      (list (magit-completing-read "Resolve file" unmerged nil t nil nil
                                   (car (member current unmerged))))))
   (if vdiff-magit-use-ediff-for-merges
-      (magit-ediff-resolve file)
+      (magit-ediff-resolve-rest file)
     (vdiff-merge-conflict file)))
 
 ;;;###autoload
@@ -137,8 +138,7 @@ FILE has to be relative to the top directory of the repository."
    (list (magit-completing-read "Selectively stage file" (magit-tracked-files)
                                 nil nil nil nil (magit-current-file))))
   (magit-with-toplevel
-    (let* ((buf-a (or (magit-get-revision-buffer "HEAD" file)
-                      (magit-find-file-noselect "HEAD" file)))
+    (let* ((buf-a (magit-find-file-noselect "HEAD" file))
            (buf-b (with-current-buffer (magit-find-file-index-noselect file t)
                     (setq buffer-read-only nil)
                     (current-buffer)))
@@ -219,13 +219,11 @@ range)."
   (magit-with-toplevel
     (vdiff-buffers
      (if rev-a
-         (or (magit-get-revision-buffer rev-a file-a)
-             (magit-find-file-noselect rev-a file-a))
+         (magit-find-file-noselect rev-a file-a)
        (or (get-file-buffer file-a)
            (find-file-noselect file-a)))
      (if rev-b
-         (or (magit-get-revision-buffer rev-b file-b)
-             (magit-find-file-noselect rev-b file-b))
+         (magit-find-file-noselect rev-b file-b)
        (or (get-file-buffer file-b)
            (find-file-noselect file-b)))
      nil 'vdiff-magit--kill-temp-buffers t nil)))
@@ -314,8 +312,7 @@ FILE must be relative to the top directory of the repository."
                                  (magit-staged-files)
                                  "No staged files")))
   (vdiff-buffers
-   (or (magit-get-revision-buffer "HEAD" file)
-       (magit-find-file-noselect "HEAD" file))
+   (magit-find-file-noselect "HEAD" file)
    (or (get-buffer (concat file ".~{index}~"))
        (magit-find-file-index-noselect file t))
    nil nil t t))
@@ -350,8 +347,7 @@ FILE must be relative to the top directory of the repository."
                                  "No changed files")))
   (magit-with-toplevel
     (vdiff-buffers
-     (or (magit-get-revision-buffer "HEAD" file)
-         (magit-find-file-noselect "HEAD" file))
+     (magit-find-file-noselect "HEAD" file)
      (or (get-file-buffer file) (find-file-noselect file))
      nil nil t t)))
 
@@ -379,14 +375,11 @@ stash that were staged."
           (file-b file-c))
     (if (and vdiff-magit-show-stash-with-index
              (member file-a (magit-changed-files rev-b rev-a)))
-        (let ((buf-a (magit-get-revision-buffer rev-a file-a))
-              (buf-b (magit-get-revision-buffer rev-b file-b))
-              (buf-c (magit-get-revision-buffer rev-c file-c)))
-          (vdiff-buffers3
-           (or buf-a (magit-find-file-noselect rev-a file-a))
-           (or buf-b (magit-find-file-noselect rev-b file-b))
-           (or buf-c (magit-find-file-noselect rev-c file-c))
-           nil t t))
+        (vdiff-buffers3
+           (magit-find-file-noselect rev-a file-a)
+           (magit-find-file-noselect rev-b file-b)
+           (magit-find-file-noselect rev-c file-c)
+           nil t t)
       (vdiff-magit-compare rev-a rev-c file-a file-c))))
 
 (provide 'vdiff-magit)
